@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ ! $# -eq 2 ]; then
+	echo "Usage: $0 port baud"
+	exit
+fi
+
+stty -F $1 cs8 $2 ignbrk -brkint -icrnl -imaxbel -opost -onlcr -isig -icanon -iexten -echo -echoe -echok -echoctl -echoke noflsh -ixon -crtscts

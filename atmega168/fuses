@@ -1,0 +1,1 @@
+avrdude -p atmega168 -P /dev/ttyACM0 -c stk500v2 -U lfuse:w:0xff:m

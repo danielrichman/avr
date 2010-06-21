@@ -1,0 +1,12 @@
+ATxmega128a1_original.hex
+  I attempted to restore the xplain to its funky-sound-flashy-state using the 
+  hex files that are provided by AVR, on the xplain pages, however this did 
+  not work (perhaps an oddity of avrdude). Instead, I used 
+    avrdude -U flash:r:ATxmega128a1_original.hex:i 
+  to back up the contents of its flash before I overwrote anything, and used 
+  the resulting file to reset the xmega to its original state later.
+  Copyright (C) 2010 Atmel Corporation
+
+XPLAINBridge.hex : 
+  Compiled from LUFA100513/Projects/XPLAINBridge
+  Copyright (C) Dean Camera, 2010.
