@@ -12,6 +12,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
+import os
 import sys
 import struct
 
@@ -21,9 +22,9 @@ import gtk
 
 print "Port: ", sys.argv[1]
 
-system("stty -F %s cs8 9600 ignbrk -brkint -icrnl -imaxbel -opost -onlcr "
-       "-isig -icanon -iexten -echo -echoe -echok -echoctl -echoke noflsh "
-       "-ixon -crtscts" & sys.argv[1])
+os.system("stty -F %s cs8 9600 ignbrk -brkint -icrnl -imaxbel -opost -onlcr "
+          "-isig -icanon -iexten -echo -echoe -echok -echoctl -echoke noflsh "
+          "-ixon -crtscts" % sys.argv[1])
 
 def change(adj, l, f):
   l.set_text(str(int(adj.value)))
