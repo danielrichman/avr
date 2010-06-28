@@ -33,7 +33,7 @@ def change(adj, l, f):
 f = open(sys.argv[1], 'wb', 0)
 w = gtk.Window()
 l = gtk.Label()
-a = gtk.Adjustment(upper=4096, step_incr=1, page_incr=1024, page_size=1)
+a = gtk.Adjustment(upper=4096, step_incr=1, page_incr=128, page_size=1)
 a.connect("value_changed", change, l, f)
 a.value_changed()
 h = gtk.HScrollbar(adjustment=a)
