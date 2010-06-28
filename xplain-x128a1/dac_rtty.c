@@ -17,46 +17,46 @@
 
 /* Uses the XPLAINBridge in USART bridge mode: 9600 baud */
 
+#include <string.h>
 #include <stdint.h>
 #include <avr/io.h>
-#include <avr/interrupt.h>
 #include <util/delay.h>
 
-#define PM_SLEEP_CTRL SLEEP.CTRL /* Hack for avr-libc 1.6.2 */
-#include <avr/sleep.h>
+#define LOW  2741
+#define HIGH 2439
+#define BAUD 50
 
-uint8_t status;
-uint8_t data;
-
-ISR(USARTC0_RXC_vect)
-{
-  if (status == 0)
-  {
-    data = USARTC0.DATA;
-    status++;
-  }
-  else
-  {
-    DACA.CH0DATA = (data << 8) | USARTC0.DATA;
-    status = 0;
-  }
-}
+char *str = "Hello world\n";
+uint8_t i;
 
 int main(void)
 {
-  uint16_t data;
+  uint8_t c, m;
 
   DACA.CTRLA = DAC_CH0EN_bm | DAC_ENABLE_bm;
   DACA.CTRLC = DAC_REFSEL_INT1V_gc;
   DACA.CH0DATA = 0x00;
 
-  USARTC0.CTRLA = USART_RXCINTLVL_HI_gc;
-  USARTC0.CTRLC = USART_CHSIZE_8BIT_gc;
-  USARTC0.BAUDCTRLA = 12;
-  USARTC0.CTRLB = USART_RXEN_bm;
+  for (;;)
+  {
+    for (i = 0; i < strlen(str); i++)
+    {
+      c = str[i];
 
-  PMIC.CTRL = PMIC_HILVLEN_bm;
-  sei();
+      DACA.CH0DATA = HIGH;
+      _delay_ms(1000/BAUD);
 
-  for (;;) sleep_mode();
+      for (m = 0x01; m != 0x00; m <<= 1)
+      {
+        if (c & m)  DACA.CH0DATA = LOW;
+        else        DACA.CH0DATA = HIGH;
+
+        _delay_ms(1000/BAUD);
+      }
+
+      DACA.CH0DATA = LOW;
+      _delay_ms(1000/BAUD);
+      _delay_ms(1000/BAUD);
+    }
+  }
 }

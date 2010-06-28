@@ -27,7 +27,7 @@ int main(void)
   uint8_t data;
   uint8_t input;
  
-  PORTE.DIR      = 0xFF;
+  PORTE.DIR = 0xFF;
   PORTE.OUT = 0xFF;
 
   PORTF.PIN0CTRL = PORT_OPC0_bm | PORT_OPC1_bm;
