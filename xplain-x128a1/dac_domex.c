@@ -39,7 +39,7 @@
 #include <util/delay.h>
 
 #define NUM_TONES 18
-#define BASE 2741
+#define BASE 2103
 #define TONE_SHIFT 36
 #define DELAY 1484
 
@@ -103,7 +103,7 @@ static void dominoex_sendtone(uint8_t tone)
   while (!(TCD0.INTFLAGS & TC0_OVFIF_bm));
   TCD0.INTFLAGS = TC0_OVFIF_bm;
 
-  DACA.CH0DATA = BASE - (tone * TONE_SHIFT);
+  DACA.CH0DATA = BASE + (tone * TONE_SHIFT);
 }
 
 static void dominoex_sendsymbol(uint8_t sym)

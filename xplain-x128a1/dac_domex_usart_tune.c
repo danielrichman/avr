@@ -53,7 +53,7 @@
 #include <avr/interrupt.h>
 
 #define NUM_TONES 18
-#define BASE 2741
+#define BASE 2103
 volatile uint8_t TONE_SHIFT;
 
 // This is the primary alphabet only, if you want the secondary alphabet, go fish
@@ -109,7 +109,7 @@ static void dominoex_sendtone(uint8_t tone)
   TCD0.INTFLAGS = TC0_OVFIF_bm;
   // _delay_ms(44);
 
-  DACA.CH0DATA = BASE - (tone * TONE_SHIFT);
+  DACA.CH0DATA = BASE + (tone * TONE_SHIFT);
 }
 
 static void dominoex_sendsymbol(uint8_t sym)

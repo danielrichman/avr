@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2008  Daniel Richman
+    Copyright (C) 2010  Daniel Richman
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,20 +22,32 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#define LOW  2741
-#define HIGH 2439
-#define BAUD 50
+#define LOW  2000
+#define HIGH 2700
+#define DELAY 104 /* 300 baud */
 
 char *str = "Hello world\n";
 uint8_t i;
 
+void delay()
+{
+  /* TODO: Use interrupts */
+  while (!(TCD0.INTFLAGS & TC0_OVFIF_bm));
+  TCD0.INTFLAGS = TC0_OVFIF_bm;
+}
+
 int main(void)
 {
-  uint8_t c, m;
+  uint8_t c, m, i;
 
   DACA.CTRLA = DAC_CH0EN_bm | DAC_ENABLE_bm;
   DACA.CTRLC = DAC_REFSEL_INT1V_gc;
-  DACA.CH0DATA = 0x00;
+  DACA.CH0DATA = HIGH;
+
+  TCD0.PER = DELAY;
+  TCD0.CTRLA = TC_CLKSEL_DIV64_gc;
+
+  delay();
 
   for (;;)
   {
@@ -43,20 +55,20 @@ int main(void)
     {
       c = str[i];
 
-      DACA.CH0DATA = HIGH;
-      _delay_ms(1000/BAUD);
+      DACA.CH0DATA = LOW;
+      delay();
 
       for (m = 0x01; m != 0x00; m <<= 1)
       {
-        if (c & m)  DACA.CH0DATA = LOW;
-        else        DACA.CH0DATA = HIGH;
+        if (c & m)  DACA.CH0DATA = HIGH;
+        else        DACA.CH0DATA = LOW;
 
-        _delay_ms(1000/BAUD);
+        delay();
       }
 
-      DACA.CH0DATA = LOW;
-      _delay_ms(1000/BAUD);
-      _delay_ms(1000/BAUD);
+      DACA.CH0DATA = HIGH;
+      delay();
+      delay();
     }
   }
 }
