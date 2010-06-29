@@ -44,8 +44,6 @@ ISR(USARTC0_RXC_vect)
 
 int main(void)
 {
-  uint16_t data;
-
   DACA.CTRLA = DAC_CH0EN_bm | DAC_ENABLE_bm;
   DACA.CTRLC = DAC_REFSEL_INT1V_gc;
   DACA.CH0DATA = 0x00;
