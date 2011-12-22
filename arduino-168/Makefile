@@ -25,6 +25,9 @@ all : $(hexfiles)
 %.elf : %.c
 	avr-gcc -mmcu=atmega168 -DF_CPU=16000000 -Wall -pedantic -O2 -o $@ $<
 
+fake_nmea.elf : fake_nmea.c
+	avr-gcc -mmcu=atmega168 -DF_CPU=16000000 -Wall -pedantic -O2 -o $@ $< -lm
+
 %.hex : %.elf
 	avr-objcopy -O ihex $< $@
 	avr-size $@
@@ -35,7 +38,7 @@ all : $(hexfiles)
 		-U flash:w:$<
 
 clean :
-	rm -f *.hex 
+	rm -f *.hex fake_nmea.elf
 
 .PHONY : clean
 
